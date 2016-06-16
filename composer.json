@@ -1,0 +1,9 @@
+{
+    "name": "sdcom",
+
+    "autoload": {
+        "psr-4": {
+            "Core\\": "core"
+        }
+    }
+}
