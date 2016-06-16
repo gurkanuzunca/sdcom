@@ -3,6 +3,13 @@
 namespace Core;
 
 
+/**
+ * @todo ilk çalıştırmada tüm atamalar yapılacak ve işlemler atanmış verilerden yapılacak.
+ *
+ * Class Request
+ * @package Core
+ */
+
 class Request
 {
 
