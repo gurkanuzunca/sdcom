@@ -1,17 +1,40 @@
 <?php
 
-namespace Core;
-
 
 /**
- * @todo ilk çalıştırmada tüm atamalar yapılacak ve işlemler atanmış verilerden yapılacak.
- *
  * Class Request
  * @package Core
  */
 
 class Request
 {
+
+    private static $gets;
+    private static $posts;
+    private static $files;
+    private static $cookies;
+    private static $server;
+
+    private static $ip;
+    private static $protocol;
+    private static $isAjax;
+    private static $method;
+    private static $host;
+    private static $path;
+    private static $queryString;
+    private static $url;
+    private static $fullUrl;
+    private static $segments;
+
+
+    public static function capture()
+    {
+        static::$gets = $_GET;
+        static::$posts = $_POST;
+        static::$files = $_FILES;
+        static::$cookies = $_COOKIE;
+        static::$server = $_SERVER;
+    }
 
     /**
      * Get değerini döndürür.
@@ -22,7 +45,7 @@ class Request
      */
     public static function get($key = null, $default = null)
     {
-        return static::getArrayValue($_GET, $key, $default);
+        return static::getArrayValue(static::$gets, $key, $default);
     }
 
 
@@ -34,7 +57,7 @@ class Request
      */
     public static function hasGet($key)
     {
-        $value = static::getArrayValue($_GET, $key, false);
+        $value = static::getArrayValue(static::$gets, $key, false);
 
         if ($value !== false || $value !== '') {
             return true;
@@ -53,7 +76,7 @@ class Request
      */
     public static function post($key = null, $default = null)
     {
-        return static::getArrayValue($_POST, $key, $default);
+        return static::getArrayValue(static::$posts, $key, $default);
     }
 
 
@@ -65,7 +88,7 @@ class Request
      */
     public static function hasPost($key)
     {
-        $value = static::getArrayValue($_POST, $key, false);
+        $value = static::getArrayValue(static::$posts, $key, false);
 
         if ($value !== false || $value !== '') {
             return true;
@@ -84,7 +107,7 @@ class Request
      */
     public static function file($key = null, $default = null)
     {
-        return static::getArrayValue($_FILES, $key, $default);
+        return static::getArrayValue(static::$files, $key, $default);
     }
 
 
@@ -97,7 +120,7 @@ class Request
      */
     public static function cookie($key = null, $default = null)
     {
-        return static::getArrayValue($_COOKIE, $key, $default);
+        return static::getArrayValue(static::$cookies, $key, $default);
     }
 
 
@@ -110,19 +133,22 @@ class Request
      */
     public static function server($key = null, $default = null)
     {
-        return static::getArrayValue($_SERVER, $key, $default);
+        return static::getArrayValue(static::$server, $key, $default);
     }
 
 
     /**
      * İstemci ip adresini döndürür.
      *
-     * @param string $default
      * @return mixed
      */
-    public static function ip($default = '0.0.0.0')
+    public static function ip()
     {
-        return static::server('REMOTE_ADDR', $default);
+        if (static::$ip === null) {
+            static::$ip = static::server('REMOTE_ADDR');
+        }
+
+        return static::$ip;
     }
 
 
@@ -133,11 +159,15 @@ class Request
      */
     public static function protocol()
     {
-        if (static::server('HTTPS') == 'on' || static::server('HTTPS') == 1 ||  static::server('SERVER_PORT') == 443) {
-            return 'https';
+        if (static::$protocol === null) {
+            if (static::server('HTTPS') == 'on' || static::server('HTTPS') == 1 ||  static::server('SERVER_PORT') == 443) {
+                static::$protocol = 'https';
+            }
+
+            static::$protocol = 'http';
         }
 
-        return 'http';
+        return static::$protocol;
     }
 
 
@@ -148,19 +178,26 @@ class Request
      */
     public static function isAjax()
     {
-        return (static::server('HTTP_X_REQUESTED_WITH') !== null) and strtolower(static::server('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest';
+        if (static::$isAjax === null) {
+            static::$isAjax = (static::server('HTTP_X_REQUESTED_WITH') !== null) and strtolower(static::server('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest';
+        }
+
+        return static::$isAjax;
     }
 
 
     /**
      * İstek metodunu döndürür.
      *
-     * @param string $default
      * @return mixed
      */
-    public static function method($default = 'GET')
+    public static function method()
     {
-        return static::server('REQUEST_METHOD', $default);
+        if (static::$method === null) {
+            static::$method = static::server('REQUEST_METHOD');
+        }
+
+        return static::$method;
     }
 
 
@@ -186,7 +223,11 @@ class Request
      */
     public static function host()
     {
-        return static::server('HTTP_HOST');
+        if (static::$host === null) {
+            static::$host = static::server('HTTP_HOST');
+        }
+
+        return static::$host;
     }
 
 
@@ -197,9 +238,13 @@ class Request
      */
     public static function path()
     {
-        $uri = explode('?', static::server('REQUEST_URI'));
+        if (static::$path === null) {
+            $uri = explode('?', static::server('REQUEST_URI'));
+            static::$path = ltrim($uri[0], '/');
+        }
 
-        return ltrim($uri[0], '/');
+        return static::$path;
+
     }
 
     /**
@@ -209,7 +254,11 @@ class Request
      */
     public static function queryString()
     {
-        return static::server('QUERY_STRING');
+        if (static::$queryString === null) {
+            static::$queryString = static::server('QUERY_STRING');
+        }
+
+        return static::$queryString;
     }
 
 
@@ -220,7 +269,11 @@ class Request
      */
     public static function url()
     {
-        return static::protocol() .'://'. static::host() .'/'. static::path();
+        if (static::$url === null) {
+            static::$url = static::protocol() .'://'. static::host() .'/'. static::path();
+        }
+
+        return static::$url;
     }
 
     /**
@@ -230,23 +283,32 @@ class Request
      */
     public static function fullUrl()
     {
-        $queryString = static::queryString();
+        if (static::$fullUrl === null) {
+            $queryString = static::queryString();
+            static::$fullUrl = static::url() . (! empty($queryString) ? '?'.$queryString : '');
+        }
 
-        return static::url() . (! empty($queryString) ? '?'.$queryString : '');
+        return static::$fullUrl;
     }
 
 
     /**
+     * @todo çalışma dizini dışındaki veriler getirilecek.
      * Uri segmentleri döndürür.
      *
      * @return array
      */
     public static function segments()
     {
-        return explode('/', static::path());
+        if (static::$segments === null) {
+            static::$segments = explode('/', static::path());
+        }
+
+        return static::$segments;
     }
 
     /**
+     * @todo çalışma dizini dışındaki veriler getirilecek.
      * İndisi verilen gegment değerini döndürür.
      *
      * @param int $index
@@ -293,11 +355,7 @@ class Request
             }
         }
 
-
         return $array;
     }
-
-
-
-
 }
+
