@@ -130,7 +130,7 @@ class Route
      * @param string $value
      * @return bool
      */
-    private function match($pattern, $value)
+    private static function match($pattern, $value)
     {
         return preg_match('@^'.$pattern.'$@i', $value) ? true : false;
     }
