@@ -6,6 +6,7 @@ class HomeController extends Controller
     public function indexAction()
     {
         echo 'index çalıştı<br>';
+
         $validation = Validation::make(Request::post(), array(
             'name' => array(
                 'required' => 'Lütfen adınızı ve soyadınızı yazın.',
@@ -27,13 +28,17 @@ class HomeController extends Controller
         );
 
         if ($validation->valid()) {
-            echo 'oldu';
+            echo 'oldu<br>';
         } else {
-            echo 'olmadı';
+            echo 'olmadı<br>';
         }
 
 
-        var_dump(Config::get());
+        print_r(Config::get());
+
+        Config::set('data.first', 1);
+
+        print_r(Config::get());
     }
 
 }

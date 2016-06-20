@@ -99,7 +99,7 @@ class Config
                 $array[$part] = array();
             }
 
-            $array = &$array[$part];
+            $array =& $array[$part];
         }
 
         $array = $value;
