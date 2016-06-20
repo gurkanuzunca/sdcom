@@ -1,5 +1,6 @@
 <?php
 
+
 require __DIR__ . '/vendor/autoload.php';
 
 spl_autoload_register(function ($class) {
@@ -10,11 +11,11 @@ spl_autoload_register(function ($class) {
     }
 });
 
+/*
+ * Hello papa
+ */
+require 'src/routes.php';
 
-$app = new Boss;
+Request::capture();
 
-echo Request::fullUrl();
-
-
-
-
+Route::run();

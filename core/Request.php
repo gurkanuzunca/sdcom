@@ -239,12 +239,14 @@ class Request
     public static function path()
     {
         if (static::$path === null) {
-            $uri = explode('?', static::server('REQUEST_URI'));
-            static::$path = ltrim($uri[0], '/');
+            $request = static::server('REQUEST_URI');
+            $dir = dirname(static::server('SCRIPT_NAME'));
+            $request = str_replace($dir, '', $request);
+            $uri = explode('?', $request);
+            static::$path = ltrim($uri[0], '/') .'/';
         }
 
         return static::$path;
-
     }
 
     /**
@@ -339,6 +341,7 @@ class Request
      */
     private static function getArrayValue(array $array, $key, $default = null)
     {
+
         if (is_null($key)) {
             return $array;
         }
