@@ -8,11 +8,19 @@
 
 class Route
 {
-
+    private static $path = 'src/Controllers/';
     private static $routes = array();
-    private static $action = array();
+    private static $action;
 
 
+    /**
+     * Rotasyon eklemesi yapılır.
+     *
+     * @param $pattern
+     * @param $controller
+     * @param $action
+     * @param string $method
+     */
     public static function add($pattern, $controller, $action, $method = '*')
     {
         static::$routes[] = array(
@@ -23,23 +31,44 @@ class Route
         );
     }
 
+
+    /**
+     * Metod GET olarak rotasyon eklemesi yapılır.
+     *
+     * @param $pattern
+     * @param $controller
+     * @param $action
+     */
     public static function get($pattern, $controller, $action)
     {
         static::add($pattern, $controller, $action, 'GET');
     }
 
+
+    /**
+     * Metod POST olarak rotasyon eklemesi yapılır.
+     * @param $pattern
+     * @param $controller
+     * @param $action
+     */
     public static function post($pattern, $controller, $action)
     {
         static::add($pattern, $controller, $action, 'POST');
     }
 
+
+    /**
+     * Rotasyonlar sırayla kontrol edilir. Eşleşen rotasyon çalıştırılır.
+     *
+     * @return bool
+     * @throws Exception
+     */
     public static function run()
     {
-        $path = 'src/Controllers/';
         foreach (static::$routes as $route) {;
 
             if (static::method($route['method']) === true && static::match($route['pattern'], Request::path()) === true) {
-                $file = $path . $route['controller'] .'.php';
+                $file = static::$path . $route['controller'] .'.php';
 
                 if (! file_exists($file)) {
                     throw new Exception('Controller does not exist!');
@@ -50,8 +79,10 @@ class Route
                 $instance = new $route['controller']();
                 $instance->$route['action']();
 
+                static::$action = $route;
 
-                $path = "gittigin yol yol degil";
+                return true;
+
             }
         }
     }
@@ -68,8 +99,8 @@ class Route
         if ($method == '*'){
             return true;
         }
-        $method = strtoupper($method);
-        if (in_array($_SERVER['REQUEST_METHOD'], explode(',', $method))){
+
+        if (in_array($_SERVER['REQUEST_METHOD'], explode(',', strtoupper($method)))){
             return true;
         }
 

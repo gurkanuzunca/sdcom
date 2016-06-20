@@ -17,5 +17,4 @@ spl_autoload_register(function ($class) {
 require 'src/routes.php';
 
 Request::capture();
-
 Route::run();
