@@ -89,10 +89,25 @@ class Route
 
 
     /**
+     * Çalıştırılan rotasyon bilgisini döndürür.
+     *
+     * @return bool|array
+     */
+    public static function getAction()
+    {
+        if (static::$action === null) {
+            return false;
+        }
+
+        return static::$action;
+    }
+
+
+    /**
      * Yönlendiricideki method ile Url methodunu karşılaştırır
      *
      * @param string $method
-     * @return boolean
+     * @return bool
      */
     private static function method($method)
     {
@@ -113,7 +128,7 @@ class Route
      *
      * @param string $pattern
      * @param string $value
-     * @return boolean
+     * @return bool
      */
     private function match($pattern, $value)
     {
