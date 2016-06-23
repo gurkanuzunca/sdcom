@@ -22,6 +22,14 @@ class Validation
         $this->rules = $rules;
     }
 
+
+    /**
+     * Validate nesnesinin static olarak oluşturulmasını sağlar.
+     *
+     * @param array $data
+     * @param array $rules
+     * @return Validation
+     */
     public static function make(array $data, array $rules)
     {
         return new self($data, $rules);
