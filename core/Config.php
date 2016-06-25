@@ -58,7 +58,6 @@ class Config
      */
     private static function getArrayValue(array $array, $key, $default = null)
     {
-
         if (is_null($key)) {
             return $array;
         }

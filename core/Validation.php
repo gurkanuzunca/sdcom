@@ -4,6 +4,7 @@
 
 class Validation
 {
+
     private $data = array();
     private $rules = array();
     private $errors = array();
