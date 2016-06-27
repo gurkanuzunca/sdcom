@@ -23,6 +23,7 @@ spl_autoload_register(function ($class) {
 
 Config::load(require 'src/config.php');
 Request::capture();
+DB::connect(Config::get('database'));
 
 require 'src/routes.php';
 Route::run();
