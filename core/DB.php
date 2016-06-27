@@ -85,7 +85,28 @@ class DB
      */
     public static function find($table, $value, $column = 'id')
     {
-        return static::fetch('SELECT * FROM '. $table .'WHERE '. $column .' = :'. $column .' LIMIT 1', array(":$column" => $value));
+        return static::fetch('SELECT * FROM '. $table .' WHERE '. $column .' = :'. $column .' LIMIT 1', array(":$column" => $value));
+    }
+
+
+    /**
+     * Kolay count sorgusu.
+     *
+     * @param string $table
+     * @param array $parameters
+     * @return string
+     */
+    public static function count($table, $parameters = array())
+    {
+        $where = '';
+
+        if (count($parameters)> 0) {
+            $where = ' WHERE '. static::parameterForSets($parameters);
+        }
+
+        $query = static::query('SELECT count(*) as aggregate FROM '. $table . $where, $parameters);
+
+        return $query->fetchColumn();
     }
 
     /**
@@ -130,7 +151,13 @@ class DB
      */
     public static function delete($table, $parameters = array())
     {
-        $query = static::query('UPDATE FROM '. $table .' WHERE '. static::parameterForSets($parameters), $parameters);
+        $where = '';
+
+        if (count($parameters)> 0) {
+            $where = ' WHERE '. static::parameterForSets($parameters);
+        }
+
+        $query = static::query('UPDATE FROM '. $table . $where, $parameters);
 
         return $query->rowCount();
     }
