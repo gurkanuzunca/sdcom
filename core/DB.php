@@ -28,6 +28,8 @@ class DB
      *
      * @param string $sql
      * @param array $parameters
+     *
+     * @example DB::query('SELECT * FROM table WHERE id = :id, name = :name', array(':id' => 1, ':name' => 'Name');
      * @return bool|PDOStatement
      */
     public static function query($sql, $parameters = array())

@@ -27,6 +27,7 @@ class HomeController extends Controller
             ))
         );
 
+
         if ($validation->valid()) {
             echo 'oldu<br>';
         } else {
