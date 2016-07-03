@@ -24,7 +24,7 @@ class Route
     public static function add($pattern, $controller, $action, $method = '*')
     {
         static::$routes[] = array(
-            'pattern' => $pattern,
+            'pattern' => trim($pattern, '/'),
             'controller' => $controller,
             'action' => $action,
             'method' => $method

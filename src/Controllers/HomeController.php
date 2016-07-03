@@ -42,4 +42,9 @@ class HomeController extends Controller
         print_r(Config::get());
     }
 
+    public function homeAction()
+    {
+        Response::json(array('s' => 'sd'));
+    }
+
 }

@@ -27,3 +27,4 @@ DB::connect(Config::get('database'));
 
 require 'src/routes.php';
 Route::run();
+Response::write();

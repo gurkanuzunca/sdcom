@@ -243,7 +243,7 @@ class Request
             $dir = dirname(static::server('SCRIPT_NAME'));
             $request = str_replace($dir, '', $request);
             $uri = explode('?', $request);
-            static::$path = ltrim($uri[0], '/') .'/';
+            static::$path = trim($uri[0], '/');
         }
 
         return static::$path;
