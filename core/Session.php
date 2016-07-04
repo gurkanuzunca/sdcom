@@ -17,12 +17,25 @@ class Session
         return false;
     }
 
-
-    public function flash($var)
+    /**
+     * @param $key
+     * @return mixed
+     */
+    public static function has($key)
     {
-        if (isset($_SESSION[$var])) {
-            $value = $_SESSION[$var];
-            unset($_SESSION[$var]);
+        if (isset($_SESSION[$key])) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public function flash($key)
+    {
+        if (isset($_SESSION[$key])) {
+            $value = $_SESSION[$key];
+            unset($_SESSION[$key]);
 
             return $value;
         }
@@ -31,13 +44,13 @@ class Session
     }
 
     /**
-     * @param $var
+     * @param $key
      * @param $value
      * @return bool
      */
-    public static function set($var, $value)
+    public static function set($key, $value)
     {
-        $_SESSION[$var] = $value;
+        $_SESSION[$key] = $value;
     }
 
     /**

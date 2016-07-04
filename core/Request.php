@@ -24,6 +24,7 @@ class Request
     private static $queryString;
     private static $url;
     private static $fullUrl;
+    private static $baseUrl;
     private static $segments;
 
 
@@ -232,7 +233,7 @@ class Request
 
 
     /**
-     * İsten yolunu döndürür.
+     * İstek yolunu döndürür.
      *
      * @return mixed
      */
@@ -263,6 +264,20 @@ class Request
         return static::$queryString;
     }
 
+    /**
+     * Querystring harici Url'yi döndürür.
+     *
+     * @return string
+     */
+    public static function baseUrl()
+    {
+        if (static::$baseUrl === null) {
+            static::$baseUrl = static::protocol() .'://'. static::host() . dirname(static::server('SCRIPT_NAME'));
+        }
+
+        return static::$baseUrl;
+    }
+
 
     /**
      * Querystring harici Url'yi döndürür.
@@ -272,11 +287,14 @@ class Request
     public static function url()
     {
         if (static::$url === null) {
-            static::$url = static::protocol() .'://'. static::host() .'/'. static::path();
+            static::$url = static::baseUrl() .'/'. static::path();
         }
 
         return static::$url;
     }
+
+
+
 
     /**
      * Querystring dahil tam Url'i döndürür.

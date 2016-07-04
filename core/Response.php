@@ -1,6 +1,9 @@
 <?php
 
-
+/**
+ * Class Response
+ * @todo flash datalar yapılacak.
+ */
 class Response
 {
     private static $headers = array(
@@ -18,7 +21,7 @@ class Response
      */
     public static function render($file, array $data = array())
     {
-        $file = 'src/Views/'. $file .'.php';
+        $file = 'src/Views/'. $file;
 
         if (! file_exists($file)) {
             throw new Exception('View dosyasi bulunamadi.');
@@ -105,6 +108,36 @@ class Response
         static::sendHeaders();
 
         echo static::$body;
+    }
+
+
+    /**
+     * Cookie tanımlaması yapar.
+     *
+     * @param $name
+     * @param $value
+     * @param $second
+     * @param string $path
+     * @param null $domain
+     */
+    public static function setCookie($name, $value, $second, $path = '/', $domain = null)
+    {
+        if (empty($domain)) {
+            $domain = Request::host();
+            $domain = strpos($domain, 'www.') === 0 ? mb_substr($domain, 4, null, 'UTF-8') : $domain;
+        }
+
+        setcookie($name, $value, (time() + $second), $path, $domain, false, true);
+    }
+
+    /**,
+     * Cookie temizlenir.
+     *
+     * @param $name
+     */
+    public static function removeCookie($name)
+    {
+        setcookie($name, '', (time() - 3600));
     }
 
     /**

@@ -44,7 +44,13 @@ class HomeController extends Controller
 
     public function homeAction()
     {
-        Response::json(array('s' => 'sd'));
+
+        Assets::set('css', 'public/assets/css/main.css');
+
+        Response::render('base.php', array(
+            'view' => 'home.php',
+            'title' => 'Başlık'
+        ));
     }
 
 }

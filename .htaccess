@@ -1,7 +1,24 @@
-RewriteEngine On
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/gif "access plus 4 weeks"
+    ExpiresByType image/jpg "access plus 4 weeks"
+    ExpiresByType image/jpeg "access plus 4 weeks"
+    ExpiresByType image/png "access plus 4 weeks"
+    ExpiresByType image/bmp "access plus 4 weeks"
+    ExpiresByType text/css "access plus 4 weeks"
+    ExpiresByType application/javascript "access plus 4 weeks"
+    ExpiresByType application/x-javascript "access plus 4 weeks"
+    ExpiresByType text/javascript "access plus 4 weeks"
+    ExpiresByType application/x-font-woff "access plus 4 weeks"
+    ExpiresByType font/opentype "access plus 4 weeks"
+    ExpiresByType application/x-font-ttf "access plus 4 weeks"
+    ExpiresByType application/vnd.ms-fontobject "access plus 4 weeks"
+</IfModule>
 
-# RewriteBase /
-# RewriteCond %{REQUEST_FILENAME} !-f
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # RewriteCond %{REQUEST_FILENAME} !-f
 
-RewriteCond $1 !^(public)
-RewriteRule ^ index.php [QSA,L]
+    RewriteCond %{REQUEST_URI} !/public
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>

@@ -83,6 +83,8 @@ class Route
 
                 return true;
 
+            } else {
+                die('not found');
             }
         }
     }

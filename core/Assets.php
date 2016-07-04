@@ -16,8 +16,12 @@ class Assets
      * @param $arguments
      * @return bool
      */
-    public function __callStatic($name, $arguments)
+    public static function __callStatic($name, $arguments)
     {
+        if (empty($arguments)) {
+            return static::get($name);
+        }
+
         return static::set($name, $arguments);
     }
 
@@ -31,14 +35,6 @@ class Assets
      */
     public static function set($type, $sources = [])
     {
-        if (empty($sources)) {
-            if (isset(static::$assets[$type])) {
-                return static::$assets[$type];
-            }
-
-            return array();
-        }
-
         if (! is_array($sources)) {
             $sources = array($sources);
         }
@@ -49,6 +45,56 @@ class Assets
 
         static::$assets[$type] = array_merge(static::$assets[$type], $sources);
 
+    }
+
+
+
+    public static function get($type)
+    {
+        if (isset(static::$assets[$type])) {
+            return static::$assets[$type];
+        }
+
+        return array();
+    }
+
+
+
+    public static function concat($type, $version = null)
+    {
+        $config = Config::get('assets');
+        $output = '';
+        $mergeFiles = array();
+        $files = array();
+
+        foreach (static::get('css') as $file) {
+            if (file_exists($file)) {
+                $mergeFiles[] = $file;
+            } else {
+                $files[] = $file;
+            }
+        }
+
+        if (! file_exists($config['cssCache'])) {
+            foreach ($mergeFiles as $file) {
+                $content = file_get_contents($file);
+                $dir = dirname($file);
+
+                $path = Request::baseUrl() . $dir .'/' ;
+                $search = '#url\((?!\s*[\'"]?(?:https?:)?//)\s*([\'"])?#';
+                $replace = "url($1{$path}";
+                $output .= preg_replace($search, $replace, $content);
+            }
+
+            $handler = fopen($config['cssCache'], 'a');
+            fwrite($handler, $output);
+            fclose($handler);
+        }
+
+        $files[] = $config['cssCache'];
+
+
+        return $files;
     }
 
 

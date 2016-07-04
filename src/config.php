@@ -17,4 +17,9 @@ return [
         'charset'   => 'utf8'
     ),
 
+    'assets' => array(
+        'cssCache' => 'public/assets/cache.css',
+        'jsCache' => 'public/assets/cache.js'
+    )
+
 ];
