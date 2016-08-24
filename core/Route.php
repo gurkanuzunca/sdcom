@@ -65,8 +65,7 @@ class Route
      */
     public static function run()
     {
-        foreach (static::$routes as $route) {;
-
+        foreach (static::$routes as $route) {
             if (static::method($route['method']) === true && static::match($route['pattern'], Request::path()) === true) {
                 $file = static::$path . $route['controller'] .'.php';
 
@@ -82,11 +81,10 @@ class Route
                 static::$action = $route;
 
                 return true;
-
-            } else {
-                die('not found');
             }
         }
+
+        die('not found');
     }
 
 
