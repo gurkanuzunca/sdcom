@@ -59,7 +59,11 @@ class Assets
     }
 
 
-
+    /**
+     * @param $type
+     * @param null $version
+     * @return array
+     */
     public static function concat($type, $version = null)
     {
         $config = Config::get('assets');

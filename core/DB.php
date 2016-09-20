@@ -16,7 +16,6 @@ class DB
     {
         try {
             static::$connection = new PDO('mysql:host='. $config['host'] .';dbname='. $config['database'] .';charset='. $config['charset'], $config['username'], $config['password']);
-
         } catch (PDOException $e){
             echo $e->getMessage();
         }

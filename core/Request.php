@@ -46,7 +46,7 @@ class Request
      */
     public static function get($key = null, $default = null)
     {
-        return static::getArrayValue(static::$gets, $key, $default);
+        return Helper::getArrayValue(static::$gets, $key, $default);
     }
 
 
@@ -58,7 +58,7 @@ class Request
      */
     public static function hasGet($key)
     {
-        $value = static::getArrayValue(static::$gets, $key, false);
+        $value = Helper::getArrayValue(static::$gets, $key, false);
 
         if ($value !== false || $value !== '') {
             return true;
@@ -77,7 +77,7 @@ class Request
      */
     public static function post($key = null, $default = null)
     {
-        return static::getArrayValue(static::$posts, $key, $default);
+        return Helper::getArrayValue(static::$posts, $key, $default);
     }
 
 
@@ -89,7 +89,7 @@ class Request
      */
     public static function hasPost($key)
     {
-        $value = static::getArrayValue(static::$posts, $key, false);
+        $value = Helper::getArrayValue(static::$posts, $key, false);
 
         if ($value !== false || $value !== '') {
             return true;
@@ -108,7 +108,7 @@ class Request
      */
     public static function file($key = null, $default = null)
     {
-        return static::getArrayValue(static::$files, $key, $default);
+        return Helper::getArrayValue(static::$files, $key, $default);
     }
 
 
@@ -121,7 +121,7 @@ class Request
      */
     public static function cookie($key = null, $default = null)
     {
-        return static::getArrayValue(static::$cookies, $key, $default);
+        return Helper::getArrayValue(static::$cookies, $key, $default);
     }
 
 
@@ -134,7 +134,7 @@ class Request
      */
     public static function server($key = null, $default = null)
     {
-        return static::getArrayValue(static::$server, $key, $default);
+        return Helper::getArrayValue(static::$server, $key, $default);
     }
 
 
@@ -280,7 +280,7 @@ class Request
 
 
     /**
-     * Querystring harici Url'yi döndürür.
+     * Querystring harici path ile beraber Url'yi döndürür.
      *
      * @return string
      */
@@ -297,7 +297,7 @@ class Request
 
 
     /**
-     * Querystring dahil tam Url'i döndürür.
+     * Querystring ve path dahil tam Url'i döndürür.
      *
      * @return string
      */
@@ -344,39 +344,6 @@ class Request
         } else {
             return $default;
         }
-    }
-
-
-
-    /**
-     * Dizi içerisindeki değeri döndürür.
-     * Dot Notation deniliyor "key.key.key" olayına.
-     *
-     * @param array $array
-     * @param string $key Diziden çekilmek istenen key veya path (key.key.key).
-     * @param null $default Bulunamaması durumunda varsayılan değer.
-     * @return mixed
-     */
-    private static function getArrayValue(array $array, $key, $default = null)
-    {
-
-        if (is_null($key)) {
-            return $array;
-        }
-
-        if (isset($array[$key])) {
-            return $array[$key];
-        }
-
-        foreach (explode('.', $key) as $part) {
-            if (isset($array[$part])) {
-                $array = $array[$part];
-            } else {
-                return $default;
-            }
-        }
-
-        return $array;
     }
 }
 
