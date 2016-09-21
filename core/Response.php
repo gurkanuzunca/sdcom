@@ -145,10 +145,12 @@ class Response
      */
     private static function sendHeaders()
     {
-        header_remove("X-Powered-By");
+        if (! headers_sent()) {
+            header_remove("X-Powered-By");
 
-        foreach (static::getHeader() as $key => $value) {
-            header(sprintf('%s: %s', $key, $value), false);
+            foreach (static::getHeader() as $key => $value) {
+                header(sprintf('%s: %s', $key, $value), false);
+            }
         }
     }
 
